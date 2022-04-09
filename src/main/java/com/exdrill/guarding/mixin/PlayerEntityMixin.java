@@ -1,12 +1,9 @@
 package com.exdrill.guarding.mixin;
 
-import com.exdrill.guarding.Guarding;
-import net.minecraft.client.sound.Sound;
+import com.exdrill.guarding.enchantment.ShieldEnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
 import net.minecraft.sound.SoundEvents;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Mutable;
@@ -21,35 +18,43 @@ public abstract class PlayerEntityMixin {
 
     @Mutable
     public int shieldUseDuration = 0;
+    public int shieldParry = 0;
+    public double parryKnockback = 0D;
     PlayerEntity player = (PlayerEntity) (Object) this;
 
-    @Inject(method = "tick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
         if (player.isBlocking()) {
             shieldUseDuration++;
+            shieldParry++;
         } else if(shieldUseDuration != 0 && !player.isBlocking()) {
             shieldUseDuration-=2;
+            shieldParry = 0;
         }
         if (shieldUseDuration <= 0) {
             shieldUseDuration = 0;
         }
+
+        if (ShieldEnchantmentHelper.hasPummeling(player)) {
+            parryKnockback = 1.0D;
+        } else {
+            parryKnockback = 0.5D;
+        }
     }
 
-    @Inject(method = "takeShieldHit", at = @At("HEAD"))
+    @Inject(method = "takeShieldHit", at = @At("TAIL"))
     private void takeShieldHit(LivingEntity attacker, CallbackInfo ci) {
-        if (shieldUseDuration <= 13 && shieldUseDuration > 3) {
-            attacker.knockbackVelocity = 1f;
-            attacker.takeKnockback(1f, 0, 0);
-            System.out.println("Shield Parry!");
-            shieldUseDuration = 10;
+        System.out.println(parryKnockback);
+        if (shieldParry <= 8 && shieldParry >= 0) {
             attacker.playSound(SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 0.5F, 1.0F);
+            if (ShieldEnchantmentHelper.hasBarbed(player)) {
+                attacker.damage(DamageSource.thorns(attacker), 3.0F);
+            }
+            attacker.takeKnockback( parryKnockback,  -1 * (attacker.getX() - player.getX()), -1 * (attacker.getZ() - player.getZ()));
+            shieldParry = 8;
         }
-
         if (shieldUseDuration > 100) {
             this.disableShield(false);
-            shieldUseDuration = 20;
         }
-        shieldUseDuration = 13;
-
     }
 }
