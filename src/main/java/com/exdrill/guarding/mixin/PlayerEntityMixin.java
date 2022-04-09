@@ -16,6 +16,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class PlayerEntityMixin {
     @Shadow public abstract void disableShield(boolean sprinting);
 
+    @Shadow protected abstract void damageShield(float amount);
+
     @Mutable
     public int shieldUseDuration = 0;
     public int shieldParry = 0;
@@ -49,6 +51,7 @@ public abstract class PlayerEntityMixin {
             attacker.playSound(SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 0.5F, 1.0F);
             if (ShieldEnchantmentHelper.hasBarbed(player)) {
                 attacker.damage(DamageSource.thorns(attacker), 3.0F);
+                this.damageShield(2.0F);
             }
             attacker.takeKnockback( parryKnockback,  -1 * (attacker.getX() - player.getX()), -1 * (attacker.getZ() - player.getZ()));
             shieldParry = 8;
