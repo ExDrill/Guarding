@@ -1,5 +1,7 @@
 package com.exdrill.guarding.mixin;
 
+import com.exdrill.guarding.Guarding;
+import net.minecraft.client.sound.Sound;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
@@ -35,7 +37,7 @@ public abstract class PlayerEntityMixin {
 
     @Inject(method = "takeShieldHit", at = @At("HEAD"))
     private void takeShieldHit(LivingEntity attacker, CallbackInfo ci) {
-        if (shieldUseDuration <= 10 && shieldUseDuration > 3) {
+        if (shieldUseDuration <= 13 && shieldUseDuration > 3) {
             attacker.knockbackVelocity = 1f;
             attacker.takeKnockback(1f, 0, 0);
             System.out.println("Shield Parry!");
@@ -47,6 +49,7 @@ public abstract class PlayerEntityMixin {
             this.disableShield(false);
             shieldUseDuration = 20;
         }
+        shieldUseDuration = 13;
 
     }
 }
