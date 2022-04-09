@@ -1,4 +1,5 @@
-# Guarding!
+
+![GUARDING](https://user-images.githubusercontent.com/72329798/162586175-66ab50f5-7814-490c-b150-14ec7e567dd3.png)
 
 ## What is it?
 
