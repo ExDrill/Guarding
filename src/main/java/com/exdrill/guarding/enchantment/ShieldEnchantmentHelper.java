@@ -7,10 +7,10 @@ import net.minecraft.entity.LivingEntity;
 public class ShieldEnchantmentHelper extends EnchantmentHelper {
 
     public static boolean hasPummeling(LivingEntity entity) {
-        return getEquipmentLevel(Guarding.PUMMELING, entity) == 1;
+        return getEquipmentLevel(Guarding.PUMMELING_ENCHANTMENT, entity) == 1;
     }
 
     public static boolean hasBarbed(LivingEntity entity) {
-        return getEquipmentLevel(Guarding.BARBED, entity) == 1;
+        return getEquipmentLevel(Guarding.BARBED_ENCHANTMENT, entity) == 1;
     }
 }
