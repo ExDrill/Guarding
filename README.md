@@ -23,6 +23,8 @@ Parrying can be activated by sneaking and timing a shield block just before you 
 
 If you get attacked while your shield has been out for more than 10 seconds, it will disable for 5 seconds!
 
+### REQUIRES [FABRIC SHIELD LIB](https://www.curseforge.com/minecraft/mc-mods/fabric-shield-lib)
+
 ### Feedback!
 
 We'd love to hear your feedback on these new mechanics!
