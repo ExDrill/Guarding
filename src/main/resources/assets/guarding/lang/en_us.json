@@ -1,4 +1,5 @@
 {
   "enchantment.guarding.barbed": "Barbed",
-  "enchantment.guarding.pummeling": "Pummeling"
+  "enchantment.guarding.pummeling": "Pummeling",
+  "stat.guarding.parry": "Shield Parries"
 }
