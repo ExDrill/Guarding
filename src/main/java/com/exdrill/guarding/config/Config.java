@@ -1,8 +1,9 @@
 package com.exdrill.guarding.config;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.terraformersmc.modmenu.ModMenu;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.*;
@@ -12,6 +13,8 @@ public class Config {
     private static File file;
     public static int barbedDamage;
     public static double baseKnockbackValue;
+    public static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+
 
     public static void run() {
         if (file != null) {
@@ -45,7 +48,7 @@ public class Config {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("barbed_damage", 4);
         jsonObject.addProperty("base_knockback_value", 0.5);
-        String json = ModMenu.GSON.toJson(jsonObject);
+        String json = GSON.toJson(jsonObject);
 
 
         try (FileWriter fileWriter = new FileWriter(file)) {
