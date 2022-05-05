@@ -1,18 +1,17 @@
 package com.exdrill.guarding;
 
+import com.exdrill.guarding.config.Config;
 import com.exdrill.guarding.enchantment.BarbedEnchantment;
 import com.exdrill.guarding.enchantment.PummelingEnchantment;
 import com.exdrill.guarding.enchantment.ShieldEnchantmentHelper;
 import com.github.crimsondawn45.fabricshieldlib.lib.event.ShieldBlockCallback;
-import com.github.crimsondawn45.fabricshieldlib.lib.event.ShieldDisabledCallback;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.enchantment.Enchantment;
-import net.minecraft.entity.Entity;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.entity.projectile.ProjectileEntity;
-import net.minecraft.entity.projectile.TridentEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.StatFormatter;
@@ -35,6 +34,10 @@ public class Guarding implements ModInitializer {
 
     @Override
     public void onInitialize() {
+
+        Config.run();
+
+
         System.out.println("Guarding is loaded");
         // Enchantments
         Registry.register(Registry.ENCHANTMENT, new Identifier(NAMESPACE, "pummeling"), PUMMELING_ENCHANTMENT);
@@ -54,17 +57,14 @@ public class Guarding implements ModInitializer {
             // Parry
             if (defender instanceof PlayerEntity player && defender.getItemUseTime() <= 10 && defender.isSneaking() && !source.isProjectile()) {
                 attacker.playSound(SoundEvents.ENTITY_ZOMBIE_ATTACK_IRON_DOOR, 0.5F, 1.0F);
+                ItemStack stack = player.getStackInHand(hand);
 
-                // Pummeling
-                if (ShieldEnchantmentHelper.hasPummeling(defender)) {
-                    parryKnockbackMultiplier = 1.25D;
-                } else {
-                    parryKnockbackMultiplier = 0.5D;
-                }
+                parryKnockbackMultiplier = Config.baseKnockbackValue + ((EnchantmentHelper.getEquipmentLevel(PUMMELING_ENCHANTMENT, defender) * 0.416666667) - Config.baseKnockbackValue);
 
                 // Barbed
                 if (ShieldEnchantmentHelper.hasBarbed(defender)) {
-                    attacker.damage(DamageSource.MAGIC, 4.0F);
+                    attacker.damage(DamageSource.MAGIC, Config.barbedDamage);
+                    stack.damage(2, attacker, (e) -> e.sendToolBreakStatus(hand));
                 }
 
                 // Knockback
@@ -73,16 +73,16 @@ public class Guarding implements ModInitializer {
                 double f = Math.max(Math.sqrt(d * d + e * e), 0.001D);
                 attacker.addVelocity( d/f * parryKnockbackMultiplier, 0.25D, e/f * parryKnockbackMultiplier);
                 attacker.velocityModified = true;
-                ((PlayerEntity) defender).addExhaustion(1.0F);
-                ((PlayerEntity) defender).getItemCooldownManager().set(Items.SHIELD, 20);
+                player.addExhaustion(1.0F);
+                player.getItemCooldownManager().set(Items.SHIELD, 20);
                 defender.clearActiveItem();
                 defender.world.sendEntityStatus(defender, (byte) 30);
                 defender.setInvulnerable(true);
+                stack.damage(1, attacker, (e2) -> e2.sendToolBreakStatus(hand));
 
             }
-            if (defender.getItemUseTime() > 200) {
-                assert defender instanceof PlayerEntity;
-                ((PlayerEntity) defender).getItemCooldownManager().set(Items.SHIELD, 100);
+            if (defender.getItemUseTime() > 200 && defender instanceof PlayerEntity player) {
+                player.getItemCooldownManager().set(Items.SHIELD, 100);
                 defender.clearActiveItem();
                 defender.world.sendEntityStatus(defender, (byte) 30);
             }

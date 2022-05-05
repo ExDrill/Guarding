@@ -29,8 +29,4 @@ public class BarbedEnchantment extends FabricShieldEnchantment {
     public boolean isAcceptableItem(ItemStack stack) {
         return super.isAcceptableItem(stack) && stack.getItem() instanceof ShieldItem;
     }
-
-    public boolean canAccept(Enchantment other) {
-        return !(other instanceof PummelingEnchantment) && super.canAccept(other);
-    }
 }

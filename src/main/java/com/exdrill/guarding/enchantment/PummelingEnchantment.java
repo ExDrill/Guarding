@@ -1,7 +1,6 @@
 package com.exdrill.guarding.enchantment;
 
 import com.github.crimsondawn45.fabricshieldlib.lib.object.FabricShieldEnchantment;
-import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 
@@ -24,11 +23,7 @@ public class PummelingEnchantment extends FabricShieldEnchantment {
     }
 
     public int getMaxLevel() {
-        return 1;
-    }
-
-    public boolean canAccept(Enchantment other) {
-        return !(other instanceof BarbedEnchantment) && super.canAccept(other);
+        return 3;
     }
 
 }
