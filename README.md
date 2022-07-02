@@ -19,7 +19,7 @@ Parrying can be activated by sneaking and timing a shield block just before you 
 
 - Pummeling: If you perform a parry, you will send more knockback to your opponent!
 
-### Shield Hugging Punishment
+### Shield Fatigue Mechanic
 
 If you get attacked while your shield has been out for more than 10 seconds, it will disable for 5 seconds!
 
