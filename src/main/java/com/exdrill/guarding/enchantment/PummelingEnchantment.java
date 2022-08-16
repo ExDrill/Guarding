@@ -1,12 +1,15 @@
 package com.exdrill.guarding.enchantment;
 
-import com.github.crimsondawn45.fabricshieldlib.lib.object.FabricShieldEnchantment;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentTarget;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ShieldItem;
 
-public class PummelingEnchantment extends FabricShieldEnchantment {
-    public PummelingEnchantment(Rarity weight, boolean isTreasure, boolean isCurse) {
-        super(weight, isTreasure, isCurse);
+public class PummelingEnchantment extends Enchantment {
+
+    public PummelingEnchantment(Rarity weight, EnchantmentTarget type, EquipmentSlot[] slotTypes) {
+        super(weight, type, slotTypes);
     }
 
     public int getMinPower(int level) {
@@ -19,7 +22,7 @@ public class PummelingEnchantment extends FabricShieldEnchantment {
 
     @Override
     public boolean isAcceptableItem(ItemStack stack) {
-        return super.isAcceptableItem(stack) && stack.getItem() instanceof ShieldItem;
+        return stack.getItem() instanceof ShieldItem;
     }
 
     public int getMaxLevel() {

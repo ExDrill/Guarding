@@ -15,8 +15,15 @@
   "entrypoints": {
     "main": [
       "com.exdrill.guarding.Guarding"
+    ],
+    "client": [
+      "com.exdrill.guarding.GuardingClient"
+    ],
+    "mm:early_risers": [
+      "com.exdrill.guarding.GuardingEarlyRiser"
     ]
   },
+  "accesswidener": "guarding.accesswidener",
   "mixins": [
     "guarding.mixins.json"
   ],

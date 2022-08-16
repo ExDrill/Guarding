@@ -1,54 +1,39 @@
 package com.exdrill.guarding;
 
-import com.exdrill.guarding.config.Config;
-import com.exdrill.guarding.enchantment.BarbedEnchantment;
-import com.exdrill.guarding.enchantment.PummelingEnchantment;
-import com.exdrill.guarding.enchantment.ShieldEnchantmentHelper;
-import com.github.crimsondawn45.fabricshieldlib.lib.event.ShieldBlockCallback;
+import com.chocohead.mm.api.ClassTinkerers;
+import com.exdrill.guarding.registry.GuardingEnchantments;
+import com.exdrill.guarding.registry.GuardingParticles;
+import com.exdrill.guarding.registry.ModItems;
 import net.fabricmc.api.ModInitializer;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
-import net.minecraft.entity.LivingEntity;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
-import net.minecraft.sound.SoundEvents;
+import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.stat.StatFormatter;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
 public class Guarding implements ModInitializer {
+
     public static String NAMESPACE = "guarding";
 
 
-    public static final PummelingEnchantment PUMMELING_ENCHANTMENT = new PummelingEnchantment(Enchantment.Rarity.COMMON, false, false);
-    public static final BarbedEnchantment BARBED_ENCHANTMENT = new BarbedEnchantment(Enchantment.Rarity.RARE, false, false);
-
-
     public static final Identifier PARRY = new Identifier(NAMESPACE, "parry");
+    public static final EnchantmentTarget GUARDING_SHIELD = ClassTinkerers.getEnum(EnchantmentTarget.class, "GUARDING_SHIELD");
 
-    public double parryKnockbackMultiplier = 0D;
 
     @Override
     public void onInitialize() {
 
-        Config.run();
-
-
-        System.out.println("Guarding is loaded");
-        // Enchantments
-        Registry.register(Registry.ENCHANTMENT, new Identifier(NAMESPACE, "pummeling"), PUMMELING_ENCHANTMENT);
-        Registry.register(Registry.ENCHANTMENT, new Identifier(NAMESPACE, "barbed"), BARBED_ENCHANTMENT);
+        GuardingParticles.register();
+        ModItems.register();
+        GuardingEnchantments.register();
 
         // Stats
         Registry.register(Registry.CUSTOM_STAT, new Identifier(NAMESPACE, "parry"), PARRY);
         Stats.CUSTOM.getOrCreateStat(PARRY, StatFormatter.DEFAULT);
+    }
 
-
-        // Shield Parrying
+    /*
+    public void onShieldBlock() {
         ShieldBlockCallback.EVENT.register((defender, source, amount, hand, shield) -> {
             // Living Entity
             LivingEntity attacker = (LivingEntity) source.getAttacker();
@@ -89,6 +74,7 @@ public class Guarding implements ModInitializer {
 
             return ActionResult.success(true);
         });
-
     }
+
+     */
 }

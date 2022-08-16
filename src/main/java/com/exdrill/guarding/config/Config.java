@@ -22,40 +22,51 @@ public class Config {
         }
         file = new File(FabricLoader.getInstance().getConfigDir().toFile(),"guarding.json");
 
-        try {
-            if (!file.exists()) {
-                write();
-            }
-            if (file.exists()) {
-                read();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        if (!file.exists()) {
+            write();
+        }
+        if (file.exists()) {
+            read();
         }
     }
 
-    public static void read() throws FileNotFoundException {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        JsonObject json = new JsonParser().parse(reader).getAsJsonObject();
-
-        barbedDamage = json.get("barbed_damage").getAsInt();
-        baseKnockbackValue = json.get("base_knockback_value").getAsDouble();
-
+    public static void read() {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(file));
+            JsonObject json = new JsonParser().parse(reader).getAsJsonObject();
+            barbedDamage = json.get("barbed_damage").getAsInt();
+            baseKnockbackValue = json.get("base_knockback_value").getAsDouble();
+        } catch (FileNotFoundException error) {
+            error.printStackTrace();
+        }
     }
 
-    private static void write() throws FileNotFoundException {
+    private static void write() {
 
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("barbed_damage", 4);
-        jsonObject.addProperty("base_knockback_value", 0.5);
+
+        integerProperty(jsonObject, "barbed_damage", 4);
+        floatProperty(jsonObject, "base_knockback_value", 0.5F);
+
         String json = GSON.toJson(jsonObject);
 
-
-        try (FileWriter fileWriter = new FileWriter(file)) {
+        try (FileWriter fileWriter = new FileWriter(file))  {
             fileWriter.write(json);
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException error) {
+            error.printStackTrace();
         }
 
+    }
+
+    private static void integerProperty(JsonObject json, String key, int value) {
+        json.addProperty(key, value);
+    }
+
+    private static void floatProperty(JsonObject json, String key, float value) {
+        json.addProperty(key, value);
+    }
+
+    private static void booleanProperty(JsonObject json, String key, boolean value) {
+        json.addProperty(key, value);
     }
 }
