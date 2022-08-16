@@ -11,8 +11,9 @@ import java.io.*;
 public class Config {
 
     private static File file;
-    public static int barbedDamage;
-    public static double baseKnockbackValue;
+    public static int barbedDamage = 3;
+    public static double baseKnockbackValue = 0.5F;
+    public static boolean enableShieldHuggingPunishment = true;
     public static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
 
 
@@ -34,8 +35,12 @@ public class Config {
         try {
             BufferedReader reader = new BufferedReader(new FileReader(file));
             JsonObject json = new JsonParser().parse(reader).getAsJsonObject();
+
             barbedDamage = json.get("barbed_damage").getAsInt();
             baseKnockbackValue = json.get("base_knockback_value").getAsDouble();
+            enableShieldHuggingPunishment = json.get("shield_hugging_punishment").getAsBoolean();
+
+
         } catch (FileNotFoundException error) {
             error.printStackTrace();
         }
@@ -45,8 +50,9 @@ public class Config {
 
         JsonObject jsonObject = new JsonObject();
 
-        integerProperty(jsonObject, "barbed_damage", 4);
+        integerProperty(jsonObject, "barbed_damage", 3);
         floatProperty(jsonObject, "base_knockback_value", 0.5F);
+        booleanProperty(jsonObject, "shield_hugging_punishment", true);
 
         String json = GSON.toJson(jsonObject);
 

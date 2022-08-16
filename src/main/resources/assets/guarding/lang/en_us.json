@@ -3,5 +3,6 @@
   "enchantment.guarding.barbed.desc": "On successful parry, the shield will deal damage to the attacker.",
   "enchantment.guarding.pummeling": "Pummeling",
   "enchantment.guarding.pummeling.desc": "On successful parry, the shield will deal knockback to the attacker.",
-  "stat.guarding.parry": "Shield Parries"
+  "stat.guarding.parry": "Shield Parries",
+  "subtitle.guarding.item.shield.parry": "Shield parries"
 }

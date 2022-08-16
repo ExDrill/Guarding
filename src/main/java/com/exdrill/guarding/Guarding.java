@@ -1,9 +1,11 @@
 package com.exdrill.guarding;
 
 import com.chocohead.mm.api.ClassTinkerers;
+import com.exdrill.guarding.config.Config;
 import com.exdrill.guarding.registry.GuardingEnchantments;
 import com.exdrill.guarding.registry.GuardingParticles;
 import com.exdrill.guarding.registry.ModItems;
+import com.exdrill.guarding.registry.ModSounds;
 import net.fabricmc.api.ModInitializer;
 import net.minecraft.enchantment.EnchantmentTarget;
 import net.minecraft.stat.StatFormatter;
@@ -24,8 +26,9 @@ public class Guarding implements ModInitializer {
     public void onInitialize() {
 
         GuardingParticles.register();
-        ModItems.register();
+        ModSounds.register();
         GuardingEnchantments.register();
+        Config.run();
 
         // Stats
         Registry.register(Registry.CUSTOM_STAT, new Identifier(NAMESPACE, "parry"), PARRY);
