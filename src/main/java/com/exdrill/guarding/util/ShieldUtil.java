@@ -24,7 +24,7 @@ public class ShieldUtil {
         int useDuration = defender.getItemUseTime();
         ItemStack itemStack = defender.getActiveItem();
 
-        if (useDuration <= 13 && defender instanceof PlayerEntity player && defender.isSneaking() && !(attacker.getMainHandStack().getItem() instanceof AxeItem)) {
+        if (useDuration <= 5 && defender instanceof PlayerEntity player && defender.isSneaking() && !(attacker.getMainHandStack().getItem() instanceof AxeItem)) {
 
             attacker.takeKnockback(0.5F + getPummelKnockback(itemStack), player.getX() - attacker.getX(), player.getZ() - attacker.getZ());
             attacker.velocityModified = true;
@@ -53,6 +53,6 @@ public class ShieldUtil {
     }
 
     public static int getDamageOnHit(ItemStack itemStack) {
-        return hasBarbed(itemStack) ? 7 : 3;
+        return hasBarbed(itemStack) ? 3 : 1;
     }
 }
