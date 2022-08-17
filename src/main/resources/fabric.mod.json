@@ -23,7 +23,7 @@
       "com.exdrill.guarding.GuardingEarlyRiser"
     ]
   },
-  "accesswidener": "guarding.accesswidener",
+  "accessWidener": "guarding.accesswidener",
   "mixins": [
     "guarding.mixins.json"
   ],
