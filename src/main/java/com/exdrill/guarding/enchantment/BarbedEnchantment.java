@@ -12,8 +12,9 @@ public class BarbedEnchantment extends Enchantment {
         super(weight, type, slotTypes);
     }
 
+
     public int getMinPower(int level) {
-        return 0;
+        return 20;
     }
 
     public int getMaxPower(int level) {

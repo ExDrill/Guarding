@@ -1,59 +1,26 @@
 {
-	"credit": "Made with Blockbench",
-	"texture_size": [64, 64],
-	"textures": {
-		"0": "guarding:entity/netherite_shield",
-		"particle": "guarding:entity/netherite_shield"
-	},
-	"elements": [
-		{
-			"from": [2, 0, 7],
-			"to": [14, 22, 8],
-			"faces": {
-				"north": {"uv": [0.25, 0.25, 3.25, 5.75], "texture": "#0"},
-				"east": {"uv": [0, 0.25, 0.25, 5.75], "texture": "#0"},
-				"south": {"uv": [3.5, 0.25, 6.5, 5.75], "texture": "#0"},
-				"west": {"uv": [3.25, 0.25, 3.5, 5.75], "texture": "#0"},
-				"up": {"uv": [3.25, 0.25, 0.25, 0], "texture": "#0"},
-				"down": {"uv": [6.25, 0, 3.25, 0.25], "texture": "#0"}
-			}
-		},
-		{
-			"from": [7, 8, 8],
-			"to": [9, 14, 14],
-			"faces": {
-				"north": {"uv": [8, 1.5, 8.5, 3], "texture": "#0"},
-				"east": {"uv": [6.5, 1.5, 8, 3], "texture": "#0"},
-				"south": {"uv": [10, 1.5, 10.5, 3], "texture": "#0"},
-				"west": {"uv": [8.5, 1.5, 10, 3], "texture": "#0"},
-				"up": {"uv": [8.5, 1.5, 8, 0], "texture": "#0"},
-				"down": {"uv": [9, 0, 8.5, 1.5], "texture": "#0"}
-			}
-		}
-	],
+	"parent": "guarding:item/netherite_shield",
+	"gui-light":"front",
 	"display": {
 		"thirdperson_righthand": {
-			"rotation": [30, -30, 0],
-			"translation": [0, -3, -2]
+			"rotation": [40, 135, 5],
+			"translation": [-1.0, -4.0, -2.0],
+			"scale": [1.00, 1.00, 1.00]
 		},
 		"thirdperson_lefthand": {
-			"rotation": [30, -30, 0],
-			"translation": [0, -3, -2]
+			"rotation": [45, 135, 0],
+			"translation": [1.5, -5.5, 0],
+			"scale": [1, 1, 1]
 		},
 		"firstperson_righthand": {
 			"rotation": [0, 180, -5],
-			"translation": [4, -9, -11],
-			"scale": [1.75, 1.75, 1.75]
+			"translation": [-6, -14, 0],
+			"scale": [1.65, 1.65, 1.65]
 		},
 		"firstperson_lefthand": {
 			"rotation": [0, 180, -5],
-			"translation": [4, -9, -11],
-			"scale": [1.75, 1.75, 1.75]
-		},
-		"gui": {
-			"rotation": [15, -25, -5],
-			"translation": [2, 3, 0],
-			"scale": [0.65, 0.65, 0.65]
+			"translation": [4, -14, 0],
+			"scale": [1.65, 1.65, 1.65]
 		}
 	}
 }

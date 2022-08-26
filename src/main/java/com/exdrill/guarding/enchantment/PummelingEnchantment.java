@@ -13,11 +13,11 @@ public class PummelingEnchantment extends Enchantment {
     }
 
     public int getMinPower(int level) {
-        return 0;
+        return 10 * level;
     }
 
     public int getMaxPower(int level) {
-        return 50;
+        return this.getMinPower(level) + 30;
     }
 
     @Override

@@ -17,18 +17,26 @@ public class Guarding implements ModInitializer {
 
     public static String NAMESPACE = "guarding";
 
-
     public static final Identifier PARRY = new Identifier(NAMESPACE, "parry");
     public static final EnchantmentTarget GUARDING_SHIELD = ClassTinkerers.getEnum(EnchantmentTarget.class, "GUARDING_SHIELD");
 
+    public static Config config;
 
     @Override
     public void onInitialize() {
 
         GuardingParticles.register();
+        config = Config.run();
         ModSounds.register();
+
+        if (config.enableExperimentalNetheriteShield()) {
+            ModItems.register();
+        }
+
+
         GuardingEnchantments.register();
-        Config.run();
+
+
 
         // Stats
         Registry.register(Registry.CUSTOM_STAT, new Identifier(NAMESPACE, "parry"), PARRY);

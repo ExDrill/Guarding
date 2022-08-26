@@ -1,78 +1,74 @@
 package com.exdrill.guarding.config;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 import net.fabricmc.loader.api.FabricLoader;
 
 import java.io.*;
+import java.util.Map;
+import java.util.Properties;
 
-public class Config {
+public record Config(float parryKnockback, float parryExhaustion, int barbedDamage, boolean shieldHuggingPunishment, boolean enableExperimentalNetheriteShield) {
 
-    private static File file;
-    public static int barbedDamage = 3;
-    public static double baseKnockbackValue = 0.5F;
-    public static boolean enableShieldHuggingPunishment = true;
-    public static final Gson GSON = (new GsonBuilder()).setPrettyPrinting().create();
+    public static Config run() {
 
+        // Define variables
+        float parryKnockback = 0.5F;
+        int parryExhaustion = 5;
+        int barbedDamage = 3;
+        boolean enableShieldHuggingPunishment = true;
+        boolean enableExperimentalNetheriteShield = false;
 
-    public static void run() {
-        if (file != null) {
-            return;
+        // Config File + Properties
+        File file = new File(FabricLoader.getInstance().getConfigDir().toFile(), "guarding.properties");
+        properties.setProperty("parry_knockback", "0.5");
+        properties.setProperty("parry_exhaustion", "5");
+        properties.setProperty("barbed_damage", "3");
+        properties.setProperty("shield_hugging_punishment", "true");
+        properties.setProperty("enable_experimental_netherite_shield", "false");
+
+        // Delete the JSON file if it exists, just to avoid any confusion.
+        File jsonFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "guarding.json");
+        if (jsonFile.exists()) {
+            jsonFile.delete();
         }
-        file = new File(FabricLoader.getInstance().getConfigDir().toFile(),"guarding.json");
 
-        if (!file.exists()) {
-            write();
-        }
-        if (file.exists()) {
-            read();
-        }
-    }
-
-    public static void read() {
+        // Load file
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(file));
-            JsonObject json = new JsonParser().parse(reader).getAsJsonObject();
+            if (file.isFile()) {
+                Properties loaded = new Properties();
 
-            barbedDamage = json.get("barbed_damage").getAsInt();
-            baseKnockbackValue = json.get("base_knockback_value").getAsDouble();
-            enableShieldHuggingPunishment = json.get("shield_hugging_punishment").getAsBoolean();
+                try (FileReader reader = new FileReader(file)) {
+                    loaded.load(reader);
+                }
 
+                for (Map.Entry<Object, Object> entry : properties.entrySet()) {
+                    loaded.putIfAbsent(entry.getKey(), entry.getValue());
+                }
 
-        } catch (FileNotFoundException error) {
-            error.printStackTrace();
-        }
-    }
+                properties = loaded;
+            }
 
-    private static void write() {
+            file.createNewFile();
 
-        JsonObject jsonObject = new JsonObject();
+            try (FileWriter writer = new FileWriter(file)) {
+                properties.store(writer, "Guarding Configurations");
+            }
 
-        integerProperty(jsonObject, "barbed_damage", 3);
-        floatProperty(jsonObject, "base_knockback_value", 0.5F);
-        booleanProperty(jsonObject, "shield_hugging_punishment", true);
-
-        String json = GSON.toJson(jsonObject);
-
-        try (FileWriter fileWriter = new FileWriter(file))  {
-            fileWriter.write(json);
         } catch (IOException error) {
             error.printStackTrace();
         }
 
+        try {
+            parryKnockback = Float.parseFloat(properties.getProperty("parry_knockback"));
+            parryExhaustion = Integer.parseInt(properties.getProperty("parry_exhaustion"));
+            barbedDamage = Integer.parseInt(properties.getProperty("barbed_damage"));
+            enableShieldHuggingPunishment = Boolean.parseBoolean(properties.getProperty("shield_hugging_punishment"));
+            enableExperimentalNetheriteShield = Boolean.parseBoolean(properties.getProperty("enable_experimental_netherite_shield"));
+        } catch (Exception error) {
+            error.printStackTrace();
+        }
+
+        return new Config(parryKnockback, parryExhaustion, barbedDamage, enableShieldHuggingPunishment, enableExperimentalNetheriteShield);
     }
 
-    private static void integerProperty(JsonObject json, String key, int value) {
-        json.addProperty(key, value);
-    }
-
-    private static void floatProperty(JsonObject json, String key, float value) {
-        json.addProperty(key, value);
-    }
-
-    private static void booleanProperty(JsonObject json, String key, boolean value) {
-        json.addProperty(key, value);
-    }
+    private static Properties properties = new Properties();
 }

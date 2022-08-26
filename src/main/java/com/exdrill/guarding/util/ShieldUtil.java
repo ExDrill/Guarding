@@ -1,20 +1,20 @@
 package com.exdrill.guarding.util;
 
 import com.exdrill.guarding.Guarding;
-import com.exdrill.guarding.config.Config;
+import com.exdrill.guarding.mixin.PlayerEntityMixin;
 import com.exdrill.guarding.registry.GuardingEnchantments;
 import com.exdrill.guarding.registry.GuardingParticles;
+import com.exdrill.guarding.registry.ModItems;
 import com.exdrill.guarding.registry.ModSounds;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.AxeItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.sound.SoundCategory;
-import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.math.random.Random;
 import net.minecraft.world.World;
 
@@ -23,17 +23,17 @@ public class ShieldUtil {
     public static void onShieldHit(LivingEntity defender, LivingEntity attacker) {
         World world = defender.getWorld();
         Random random = world.getRandom();
-        int useDuration = defender.getItemUseTime();
+        int useDuration = defender.getActiveItem().getMaxUseTime() - defender.getItemUseTimeLeft();
         ItemStack itemStack = defender.getActiveItem();
 
         if (defender instanceof PlayerEntity player) {
-            if (useDuration <= 5 && defender.isSneaking() && !(attacker.getMainHandStack().getItem() instanceof AxeItem)) {
+            if (useDuration <= 5 && defender.isSneaking() && defender.isBlocking()) {
 
-                attacker.takeKnockback(Config.baseKnockbackValue + getPummelKnockback(itemStack), player.getX() - attacker.getX(), player.getZ() - attacker.getZ());
+                attacker.takeKnockback(Guarding.config.parryKnockback() + getPummelKnockback(itemStack), player.getX() - attacker.getX(), player.getZ() - attacker.getZ());
                 attacker.velocityModified = true;
 
                 if (hasBarbed(itemStack)) {
-                    attacker.damage(DamageSource.thorns(defender), Config.barbedDamage * 1.0F);
+                    attacker.damage(DamageSource.thorns(defender), Guarding.config.barbedDamage() * 1.0F);
                 }
 
                 player.increaseStat(Guarding.PARRY, 1);
@@ -42,17 +42,37 @@ public class ShieldUtil {
                     server.spawnParticles(GuardingParticles.PARRY, attacker.getX(), attacker.getEyeY(), attacker.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
                 }
                 disableShield(player, 40);
+                player.addExhaustion(Guarding.config.parryExhaustion());
                 itemStack.damage(getDamageOnHit(itemStack), defender, (entity -> entity.sendToolBreakStatus(defender.getActiveHand())));
             }
-            if (useDuration >= 200 && Config.enableShieldHuggingPunishment) {
+            if (useDuration >= 200 && Guarding.config.shieldHuggingPunishment()) {
                 disableShield(player, 200);
             }
         }
     }
 
+    public static void onShieldDisable(LivingEntity entity, boolean sprinting) {
+
+        if (entity instanceof PlayerEntity player) {
+
+            float f = 0.25F + (float)EnchantmentHelper.getEfficiency(player) * 0.05F;
+            if (sprinting) {
+                f += 0.75F;
+            }
+
+            if (player.getRandom().nextFloat() < f) {
+                player.getItemCooldownManager().set(ModItems.NETHERITE_SHIELD, 100);
+                player.clearActiveItem();
+                player.world.sendEntityStatus(player, (byte)30);
+            }
+        }
+    }
+
     private static void disableShield(PlayerEntity player, int duration) {
-        player.clearActiveItem();
-        player.getItemCooldownManager().set(Items.SHIELD, duration);
+        if (player.getActiveItem().getItem() instanceof ShieldItem shieldItem) {
+            player.clearActiveItem();
+            player.getItemCooldownManager().set(shieldItem, duration);
+        }
     }
 
     private static boolean hasBarbed(ItemStack itemStack) {
