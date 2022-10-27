@@ -23,7 +23,7 @@ public record Config(float parryKnockback, float parryExhaustion, int barbedDama
         properties.setProperty("parry_exhaustion", "3");
         properties.setProperty("barbed_damage", "3");
         properties.setProperty("shield_hugging_punishment", "true");
-        properties.setProperty("enabled_experimental_netherite_shield", "false");
+        properties.setProperty("enable_experimental_netherite_shield", "false");
 
         // Delete the JSON file if it exists, just to avoid any confusion.
         File jsonFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "guarding.json");
