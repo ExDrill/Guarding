@@ -1,10 +1,8 @@
 package com.exdrill.guarding.util;
 
 import com.exdrill.guarding.Guarding;
-import com.exdrill.guarding.mixin.PlayerEntityMixin;
 import com.exdrill.guarding.registry.GuardingEnchantments;
 import com.exdrill.guarding.registry.GuardingParticles;
-import com.exdrill.guarding.registry.ModItems;
 import com.exdrill.guarding.registry.ModSounds;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.LivingEntity;
@@ -27,7 +25,7 @@ public class ShieldUtil {
         ItemStack itemStack = defender.getActiveItem();
 
         if (defender instanceof PlayerEntity player) {
-            if (useDuration <= 5 && defender.isSneaking() && defender.isBlocking()) {
+            if (useDuration <= 2 && defender.isBlocking()) {
 
                 attacker.takeKnockback(Guarding.config.parryKnockback() + getPummelKnockback(itemStack), player.getX() - attacker.getX(), player.getZ() - attacker.getZ());
                 attacker.velocityModified = true;
@@ -41,7 +39,6 @@ public class ShieldUtil {
                 if (world instanceof ServerWorld server) {
                     server.spawnParticles(GuardingParticles.PARRY, attacker.getX(), attacker.getEyeY(), attacker.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
                 }
-                disableShield(player, 40);
                 player.addExhaustion(Guarding.config.parryExhaustion());
                 itemStack.damage(getDamageOnHit(itemStack), defender, (entity -> entity.sendToolBreakStatus(defender.getActiveHand())));
             }
@@ -52,18 +49,17 @@ public class ShieldUtil {
     }
 
     public static void onShieldDisable(LivingEntity entity, boolean sprinting) {
-
         if (entity instanceof PlayerEntity player) {
-
             float f = 0.25F + (float)EnchantmentHelper.getEfficiency(player) * 0.05F;
             if (sprinting) {
                 f += 0.75F;
             }
-
             if (player.getRandom().nextFloat() < f) {
-                player.getItemCooldownManager().set(ModItems.NETHERITE_SHIELD, 100);
-                player.clearActiveItem();
-                player.world.sendEntityStatus(player, (byte)30);
+                if (player.getActiveItem().getItem() instanceof ShieldItem shieldItem && player.getActiveItem().getItem() != Items.SHIELD) {
+                    player.getItemCooldownManager().set(shieldItem, 100);
+                    player.clearActiveItem();
+                    player.world.sendEntityStatus(player, (byte)30);
+                }
             }
         }
     }
@@ -81,7 +77,7 @@ public class ShieldUtil {
 
     public static float getPummelKnockback(ItemStack itemStack) {
         int pummelLevel = EnchantmentHelper.getLevel(GuardingEnchantments.PUMMELING_ENCHANTMENT, itemStack);
-        return pummelLevel > 0 ? pummelLevel * 0.1F : 0;
+        return pummelLevel > 0 ? pummelLevel * 0.15F : 0;
     }
 
     public static int getDamageOnHit(ItemStack itemStack) {

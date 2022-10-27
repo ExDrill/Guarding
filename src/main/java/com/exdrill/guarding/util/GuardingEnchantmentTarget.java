@@ -6,7 +6,6 @@ import net.minecraft.item.Items;
 
 public class GuardingEnchantmentTarget extends EnchantmentTargetMixin {
 
-    @Override
     public boolean isAcceptableItem(Item item) {
         return item == Items.SHIELD;
     }

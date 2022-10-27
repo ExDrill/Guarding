@@ -1,6 +1,5 @@
 package com.exdrill.guarding.mixin;
 
-import com.exdrill.guarding.registry.ModItems;
 import com.exdrill.guarding.util.ShieldUtil;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.EquipmentSlot;
@@ -9,6 +8,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.item.ShieldItem;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
@@ -43,7 +43,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void damageShield(float amount, CallbackInfo ci) {
-        if (this.activeItemStack.isOf(ModItems.NETHERITE_SHIELD)) {
+        if (this.activeItemStack.getItem() instanceof ShieldItem && this.activeItemStack.getItem() != Items.SHIELD) {
             if (!this.world.isClient) {
                 this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
             }
@@ -51,9 +51,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
             if (amount >= 3.0F) {
                 int i = 1 + MathHelper.floor(amount);
                 Hand hand = this.getActiveHand();
-                this.activeItemStack.damage(i, this, (player) -> {
-                    player.sendToolBreakStatus(hand);
-                });
+                this.activeItemStack.damage(i, this, (player) -> player.sendToolBreakStatus(hand));
                 if (this.activeItemStack.isEmpty()) {
                     if (hand == Hand.MAIN_HAND) {
                         this.equipStack(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
