@@ -28,7 +28,7 @@
     "guarding.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.13.3",
+    "fabricloader": ">=0.14.10",
     "fabric": "*",
     "java": ">=17"
   },
