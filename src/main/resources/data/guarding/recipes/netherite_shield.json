@@ -11,7 +11,7 @@
     },
     "fabric:load_conditions": [
         {
-            "condition": "guarding:experimental_netherite_shield_toggle_enabled"
+            "condition": "guarding:experimental"
         }
     ]
 }

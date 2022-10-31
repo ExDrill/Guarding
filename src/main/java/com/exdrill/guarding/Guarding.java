@@ -14,10 +14,13 @@ import net.minecraft.stat.Stats;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 
+import java.util.logging.Logger;
+
 public class Guarding implements ModInitializer {
 
-    public static String NAMESPACE = "guarding";
-    public static final Identifier PARRY = new Identifier(NAMESPACE, "parry");
+    public static String MODID = "guarding";
+    public static final Logger LOGGER = Logger.getLogger(MODID);
+    public static final Identifier PARRY = new Identifier(MODID, "parry");
     public static final EnchantmentTarget GUARDING_SHIELD = ClassTinkerers.getEnum(EnchantmentTarget.class, "GUARDING_SHIELD");
     public static Config config;
 
@@ -27,10 +30,10 @@ public class Guarding implements ModInitializer {
         ModSounds.register();
         ModItems.register();
         GuardingEnchantments.register();
-        ResourceConditions.register(new Identifier(NAMESPACE, "experimental_netherite_shield_toggle_enabled"), (jsonObject -> config.enableExperimentalNetheriteShield()));
+        ResourceConditions.register(new Identifier(MODID, "experimental"), (jsonObject -> config.enableExperimentalNetheriteShield()));
 
         // Stats
-        Registry.register(Registry.CUSTOM_STAT, new Identifier(NAMESPACE, "parry"), PARRY);
+        Registry.register(Registry.CUSTOM_STAT, new Identifier(MODID, "parry"), PARRY);
         Stats.CUSTOM.getOrCreateStat(PARRY, StatFormatter.DEFAULT);
     }
 }

@@ -12,7 +12,7 @@ public class ModItems {
     public static final Item NETHERITE_SHIELD = register("netherite_shield", new NetheriteShieldItem(new Item.Settings().group(ItemGroup.COMBAT).maxDamage(612).fireproof()));
 
     public static Item register(String name, Item item) {
-        return Registry.register(Registry.ITEM, new Identifier(Guarding.NAMESPACE, name), item);
+        return Registry.register(Registry.ITEM, new Identifier(Guarding.MODID, name), item);
     }
 
     public static void register() {}

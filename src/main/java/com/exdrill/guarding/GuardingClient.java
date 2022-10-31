@@ -9,6 +9,6 @@ public class GuardingClient implements ClientModInitializer {
 
     public void onInitializeClient() {
         GuardingParticles.registerFactories();
-        ModelPredicateProviderRegistry.register(new Identifier(Guarding.NAMESPACE, "blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
+        ModelPredicateProviderRegistry.register(new Identifier(Guarding.MODID, "blocking"), (stack, world, entity, seed) -> entity != null && entity.isUsingItem() && entity.getActiveItem() == stack ? 1.0F : 0.0F);
     }
 }

@@ -1,6 +1,7 @@
 package com.exdrill.guarding.util;
 
 import com.exdrill.guarding.Guarding;
+import com.exdrill.guarding.config.Config;
 import com.exdrill.guarding.registry.GuardingEnchantments;
 import com.exdrill.guarding.registry.GuardingParticles;
 import com.exdrill.guarding.registry.ModSounds;
@@ -25,7 +26,9 @@ public class ShieldUtil {
         ItemStack itemStack = defender.getActiveItem();
 
         if (defender instanceof PlayerEntity player) {
-            if (useDuration <= 2 && defender.isBlocking()) {
+            if (useDuration <= Guarding.config.parryTickRange() && defender.isBlocking()) {
+
+                if (Guarding.config.requireSneak() && !player.isSneaking()) return;
 
                 attacker.takeKnockback(Guarding.config.parryKnockback() + getPummelKnockback(itemStack), player.getX() - attacker.getX(), player.getZ() - attacker.getZ());
                 attacker.velocityModified = true;
@@ -40,6 +43,10 @@ public class ShieldUtil {
                     server.spawnParticles(GuardingParticles.PARRY, attacker.getX(), attacker.getEyeY(), attacker.getZ(), 1, 0.0D, 0.0D, 0.0D, 0.0D);
                 }
                 player.addExhaustion(Guarding.config.parryExhaustion());
+
+                if (Config.run().applyCooldown()) {
+                    disableShield(player, 100);
+                }
                 itemStack.damage(getDamageOnHit(itemStack), defender, (entity -> entity.sendToolBreakStatus(defender.getActiveHand())));
             }
             if (useDuration >= 200 && Guarding.config.shieldHuggingPunishment()) {

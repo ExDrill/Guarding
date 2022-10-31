@@ -10,7 +10,7 @@ public class ModSounds {
     public static void register() {}
 
     public static SoundEvent register(String id) {
-        Identifier identifier = new Identifier(Guarding.NAMESPACE, id);
+        Identifier identifier = new Identifier(Guarding.MODID, id);
         return Registry.register(Registry.SOUND_EVENT, identifier, new SoundEvent(identifier));
     }
 

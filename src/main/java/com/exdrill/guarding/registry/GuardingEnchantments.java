@@ -14,7 +14,7 @@ public class GuardingEnchantments {
     public static final Enchantment BARBED_ENCHANTMENT = register("barbed", new BarbedEnchantment(Enchantment.Rarity.RARE, Guarding.GUARDING_SHIELD, new EquipmentSlot[]{EquipmentSlot.MAINHAND}));
 
     public static Enchantment register(String name, Enchantment enchantment) {
-        return Registry.register(Registry.ENCHANTMENT, new Identifier(Guarding.NAMESPACE, name), enchantment);
+        return Registry.register(Registry.ENCHANTMENT, new Identifier(Guarding.MODID, name), enchantment);
     }
 
     public static void register() {}

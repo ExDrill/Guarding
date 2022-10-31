@@ -13,7 +13,7 @@ public class GuardingParticles {
     public static final DefaultParticleType PARRY = FabricParticleTypes.simple();
 
     public static void register() {
-        Registry.register(Registry.PARTICLE_TYPE, new Identifier(Guarding.NAMESPACE, "parry"), PARRY);
+        Registry.register(Registry.PARTICLE_TYPE, new Identifier(Guarding.MODID, "parry"), PARRY);
     }
 
     public static void registerFactories() {
