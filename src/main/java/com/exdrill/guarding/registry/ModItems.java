@@ -9,7 +9,7 @@ import net.minecraft.util.registry.Registry;
 
 public class ModItems {
 
-    public static final Item NETHERITE_SHIELD = register("netherite_shield", new NetheriteShieldItem(new Item.Settings().group(ItemGroup.COMBAT).maxDamage(612).fireproof()));
+    public static final Item NETHERITE_SHIELD = register("netherite_shield", new NetheriteShieldItem(new Item.Settings().group(Guarding.config.enableExperimentalFeatures() ? ItemGroup.COMBAT : null).maxDamage(612).fireproof()));
 
     public static Item register(String name, Item item) {
         return Registry.register(Registry.ITEM, new Identifier(Guarding.MODID, name), item);

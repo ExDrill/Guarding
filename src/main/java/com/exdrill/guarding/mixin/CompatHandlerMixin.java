@@ -12,7 +12,6 @@ import net.minecraft.item.ShieldItem;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.stat.Stat;
 import net.minecraft.stat.Stats;
-import net.minecraft.util.Arm;
 import net.minecraft.util.Hand;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -23,17 +22,12 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerEntity.class)
-public abstract class PlayerEntityMixin extends LivingEntity {
+public abstract class CompatHandlerMixin extends LivingEntity {
 
     @Shadow public abstract void incrementStat(Stat<Item> stat);
 
-    protected PlayerEntityMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected CompatHandlerMixin(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
-    }
-
-    @Inject(method = "takeShieldHit", at = @At("HEAD"))
-    private void takeShieldHit(LivingEntity attacker, CallbackInfo ci) {
-        ShieldUtil.onShieldHit(this, attacker);
     }
 
     @Inject(method = "disableShield", at = @At("HEAD"))
@@ -43,7 +37,7 @@ public abstract class PlayerEntityMixin extends LivingEntity {
 
     @Inject(method = "damageShield", at = @At("HEAD"))
     private void damageShield(float amount, CallbackInfo ci) {
-        if (this.activeItemStack.getItem() instanceof ShieldItem && this.activeItemStack.getItem() != Items.SHIELD) {
+        if (this.activeItemStack.getItem() instanceof ShieldItem && !this.activeItemStack.getItem().equals(Items.SHIELD)) {
             if (!this.world.isClient) {
                 this.incrementStat(Stats.USED.getOrCreateStat(this.activeItemStack.getItem()));
             }
@@ -64,23 +58,5 @@ public abstract class PlayerEntityMixin extends LivingEntity {
                 }
             }
         }
-    }
-
-    @Shadow
-    public Iterable<ItemStack> getArmorItems() {
-        return null;
-    }
-
-    @Shadow
-    public ItemStack getEquippedStack(EquipmentSlot slot) {
-        return null;
-    }
-
-    @Shadow
-    public void equipStack(EquipmentSlot slot, ItemStack stack) {}
-
-    @Shadow
-    public Arm getMainArm() {
-        return null;
     }
 }

@@ -4,10 +4,11 @@
   "package": "com.exdrill.guarding.mixin",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "EnchantmentTargetMixin",
-    "LivingEntityMixin",
-    "PlayerEntityMixin",
-    "ShieldItemMixin"
+    "ParryHandlerMixin",
+    "RemoveShieldDelayMixin",
+    "CompatHandlerMixin",
+    "ShieldItemMixin",
+    "EnchantmentTargetMixin"
   ],
   "client": [
   ],

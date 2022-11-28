@@ -30,7 +30,7 @@ public class Guarding implements ModInitializer {
         ModSounds.register();
         ModItems.register();
         GuardingEnchantments.register();
-        ResourceConditions.register(new Identifier(MODID, "experimental"), (jsonObject -> config.enableExperimentalNetheriteShield()));
+        ResourceConditions.register(new Identifier(MODID, "experimental"), (jsonObject -> config.enableExperimentalFeatures()));
 
         // Stats
         Registry.register(Registry.CUSTOM_STAT, new Identifier(MODID, "parry"), PARRY);

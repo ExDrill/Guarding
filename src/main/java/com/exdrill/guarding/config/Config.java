@@ -7,10 +7,11 @@ import java.io.*;
 import java.util.Map;
 import java.util.Properties;
 
-public record Config(float parryKnockback, float parryExhaustion, int parryTickRange, int barbedDamage, boolean requireSneak, boolean applyCooldown, boolean shieldHuggingPunishment, boolean enableExperimentalNetheriteShield) {
+public record Config(float parryKnockback, float parryExhaustion, int parryTickRange, int barbedDamage, boolean requireSneak, boolean applyCooldown, boolean shieldHuggingPunishment, boolean enableExperimentalFeatures) {
+
+    private static Properties properties = new Properties();
 
     public static Config run() {
-
         float parryKnockback = 0.5F;
         int parryExhaustion = 5;
         int parryTickRange = 2;
@@ -18,7 +19,7 @@ public record Config(float parryKnockback, float parryExhaustion, int parryTickR
         boolean requireSneak = false;
         boolean applyCooldown = false;
         boolean enableShieldHuggingPunishment = true;
-        boolean enableExperimentalNetheriteShield = false;
+        boolean enableExperimentalFeatures = false;
 
         // Config File + Properties
         File file = new File(FabricLoader.getInstance().getConfigDir().toFile(), "guarding.properties");
@@ -28,8 +29,8 @@ public record Config(float parryKnockback, float parryExhaustion, int parryTickR
         properties.setProperty("barbed_damage", "3");
         properties.setProperty("require_sneak", "false");
         properties.setProperty("apply_cooldown", "false");
-        properties.setProperty("shield_hugging_punishment", "true");
-        properties.setProperty("enable_experimental_netherite_shield", "false");
+        properties.setProperty("shield_hug_punish_duration", "true");
+        properties.setProperty("enable_experimental_features", "false");
 
         // Deletes the legacy JSON file.
         File jsonFile = new File(FabricLoader.getInstance().getConfigDir().toFile(), "guarding.json");
@@ -40,19 +41,18 @@ public record Config(float parryKnockback, float parryExhaustion, int parryTickR
         // Load file
         try {
             if (file.isFile()) {
-                Properties loaded = new Properties();
+                Properties loadedProperties = new Properties();
 
                 try (FileReader reader = new FileReader(file)) {
-                    loaded.load(reader);
+                    loadedProperties.load(reader);
                 }
 
                 for (Map.Entry<Object, Object> entry : properties.entrySet()) {
-                    loaded.putIfAbsent(entry.getKey(), entry.getValue());
+                    loadedProperties.putIfAbsent(entry.getKey(), entry.getValue());
                 }
 
-                properties = loaded;
+                properties = loadedProperties;
             }
-
             file.createNewFile();
 
             try (FileWriter writer = new FileWriter(file)) {
@@ -71,13 +71,11 @@ public record Config(float parryKnockback, float parryExhaustion, int parryTickR
             requireSneak = Boolean.parseBoolean(properties.getProperty("require_sneak"));
             applyCooldown = Boolean.parseBoolean(properties.getProperty("apply_cooldown"));
             enableShieldHuggingPunishment = Boolean.parseBoolean(properties.getProperty("shield_hugging_punishment"));
-            enableExperimentalNetheriteShield = Boolean.parseBoolean(properties.getProperty("enable_experimental_netherite_shield"));
+            enableExperimentalFeatures = Boolean.parseBoolean(properties.getProperty("enable_experimental_features"));
         } catch (Exception error) {
             error.printStackTrace();
         }
 
-        return new Config(parryKnockback, parryExhaustion, parryTickRange, barbedDamage, requireSneak, applyCooldown, enableShieldHuggingPunishment, enableExperimentalNetheriteShield);
+        return new Config(parryKnockback, parryExhaustion, parryTickRange, barbedDamage, requireSneak, applyCooldown, enableShieldHuggingPunishment, enableExperimentalFeatures);
     }
-
-    private static Properties properties = new Properties();
 }
