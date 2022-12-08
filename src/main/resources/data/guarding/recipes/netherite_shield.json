@@ -1,0 +1,17 @@
+{
+    "type": "minecraft:smithing",
+    "base": {
+        "item": "minecraft:shield"
+    },
+    "addition": {
+        "item": "minecraft:netherite_ingot"
+    },
+    "result": {
+        "item": "guarding:netherite_shield"
+    },
+    "fabric:load_conditions": [
+        {
+            "condition": "guarding:experimental"
+        }
+    ]
+}
