@@ -1,0 +1,25 @@
+modLoader="javafml"
+loaderVersion="[43,)"
+license="All rights reserved"
+[[mods]]
+modId="guarding"
+version="${file.jarVersion}"
+displayName="Guarding"
+logoFile="guarding.png"
+credits="Thanks to OuterCloud for providing the wonderful banner art."
+authors="ExDrill"
+description='''
+
+'''
+[[dependencies.guarding]]
+    modId="forge"
+    mandatory=true
+    versionRange="[43,)"
+    ordering="NONE"
+    side="BOTH"
+[[dependencies.guarding]]
+    modId="minecraft"
+    mandatory=true
+    versionRange="[1.19.2,1.20)"
+    ordering="NONE"
+    side="BOTH"

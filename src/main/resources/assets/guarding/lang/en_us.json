@@ -5,6 +5,5 @@
   "enchantment.guarding.pummeling.desc": "On successful parry, the shield will deal knockback to the attacker.",
   "item.guarding.netherite_shield": "Netherite Shield",
   "stat.guarding.parry": "Shield Parries",
-  "subtitle.guarding.item.shield.parry": "Shield parries",
-  "datapack.experimental_netherite_shield.description": "Experimental Netherite Shield"
+  "subtitle.guarding.item.shield.parry": "Shield parries"
 }

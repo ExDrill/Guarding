@@ -1,17 +1,15 @@
 {
-  "required": false,
+  "required": true,
   "minVersion": "0.8",
-  "package": "com.exdrill.guarding.mixin",
+  "package": "com.exdrill.guarding.core.mixin",
+  "refmap": "guarding.refmap.json",
   "compatibilityLevel": "JAVA_17",
   "mixins": [
-    "ParryHandlerMixin",
-    "RemoveShieldDelayMixin",
     "CompatHandlerMixin",
-    "ShieldItemMixin",
-    "EnchantmentTargetMixin"
+    "RemoveShieldDelayMixin",
+    "ShieldItemMixin"
   ],
-  "client": [
-  ],
+  "client": [],
   "injectors": {
     "defaultRequire": 1
   }
